@@ -1,2 +1,2 @@
 #!/bin/sh
-exec nodejs /server.js
+exec nodejs /polymer-paper-elements-demo/server.js

@@ -3,10 +3,12 @@
 # to `latest`! See
 # https://github.com/phusion/baseimage-docker/blob/master/Changelog.md
 # for a list of version numbers.
-FROM phusion/baseimage
+#FROM phusion/baseimage
+FROM phusion/passenger-nodejs
 
 # Set correct environment variables.
 ENV HOME /root
+ENV PUB_FILES /polymer-paper-elements-demo
 
 # Regenerate SSH host keys. baseimage-docker does not contain any, so you
 # have to do that yourself. You may also comment out this instruction; the
@@ -21,15 +23,22 @@ CMD ["/sbin/my_init"]
 RUN apt-get update --assume-yes --quiet
 
 # Install Stuff
-RUN		apt-get -y install nodejs
+#RUN		apt-get -y install nodejs
 
 # Move into place the App Code
-ADD * /
+RUN mkdir /polymer-paper-elements-demo
+RUN chmod ugoa+rw /polymer-paper-elements-demo
+ADD *.jpg /polymer-paper-elements-demo/
+ADD *.json /polymer-paper-elements-demo/
+ADD *.html /polymer-paper-elements-demo/
+ADD *.js /polymer-paper-elements-demo/
+RUN chmod ugoa+rw -R /polymer-paper-elements-demo
 
-# Install Bower & Install Bower Dependencies
-RUN cd /
+# Install Bower, install Bower & node dependencies
 RUN npm install -g bower
-RUN bower install
+RUN cd /polymer-paper-elements-demo && bower --allow-root install
+RUN cd /polymer-paper-elements-demo && npm install
+RUN chmod ugoa+rw -R /polymer-paper-elements-demo
 
 # Setup NodeJS Runit script
 RUN mkdir /etc/service/nodejs

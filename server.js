@@ -6,6 +6,8 @@ var processUniqueUuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, 
 var Hapi = require('hapi');
 var server = new Hapi.Server(80);
 
+var publicFilesPath = (process.env.PUB_FILES)?process.env.PUB_FILES:'.';
+
 server.route([
 	{
 		method: 'GET',
@@ -18,7 +20,7 @@ server.route([
 		method: 'GET',
 		path: '/{path*}',
 		handler: {
-			directory: { path: '.', listing: false, index: true }
+			directory: { path: publicFilesPath, listing: false, index: true }
 		}
 	}
 ]);
